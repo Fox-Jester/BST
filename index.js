@@ -43,7 +43,7 @@ class Tree{
             else{
                const newNode = new Node(value);
                node.left = newNode;
-               prettyPrint(this.root);
+             
 
             } 
         }
@@ -55,12 +55,46 @@ class Tree{
             else{
                const newNode = new Node(value);
                node.right = newNode;
-               prettyPrint(this.root);
+               
             } 
         
         }
     
     }
+    
+ #findMin(node) {
+  while (node.left !== null) {
+    node = node.left;
+  }
+  return node;
+}
+  
+ deleteNode(value, node = this.root){
+  if (!node) return null;
+
+  if (value < node.data) {
+    node.left = this.deleteNode(value, node.left);
+  } else if (value > node.data) {
+    node.right = this.deleteNode(value, node.right);
+  } else {
+   
+    if (!node.left && !node.right) {
+      return null;
+    }
+
+    if (!node.left) return node.right;
+    if (!node.right) return node.left;
+
+    // Case 3: Two children
+    // Get inorder successor (smallest in right subtree)
+    let successor = this.#findMin(node.right);
+    node.data = successor.data;
+    node.right = this.deleteNode(successor.data, node.right);
+  }
+
+  return node
+
+}
 }
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
@@ -82,6 +116,7 @@ const blahArray = [2, 3, 1, 24, 54, 6564, 737];
 const BST = new Tree(blahArray);
 
 prettyPrint(BST.root);
-
 BST.insert(2424);
 BST.insert(6969);
+BST.deleteNode(737);
+prettyPrint(BST.root);
